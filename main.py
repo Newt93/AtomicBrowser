@@ -13,15 +13,9 @@ from cryptography.hazmat.backends import default_backend
 from PyQt5.QtGui import QIcon
 from cryptography.fernet import Fernet
         
-
-
-
-
-
 app = QApplication(sys.argv)
 window = QMainWindow()
 view = QWebEngineView()
-
 
 class Browser(QtWebEngineWidgets.QWebEngineView):
     def __init__(self):
