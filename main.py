@@ -26,6 +26,7 @@ class Browser(QtWebEngineWidgets.QWebEngineView):
                 return V8.eval(javascript);
             }
         """)
+        # History tab close / clear etc
         self.history_tab = QtWidgets.QTabWidget()
         self.history_tab.setTabPosition(QtWidgets.QTabWidget.West)
         self.history_tab.setMovable(True)
@@ -43,6 +44,39 @@ class Browser(QtWebEngineWidgets.QWebEngineView):
             self.history_tab.setVisible(False)
         else:
             self.history_tab.setVisible(True)
+            
+    # Creates a toolbar with a back button, forward button, and home button        
+    def create_toolbar(self):
+        self.toolbar = self.addToolBar("Navigation")
+
+        # Create the back button
+        self.back_button = QtWidgets.QAction(QIcon("path/to/back_icon.png"), "Back", self)
+        self.back_button.triggered.connect(self.back)
+        self.toolbar.addAction(self.back_button)
+
+        # Create the forward button
+        self.forward_button = QtWidgets.QAction(QIcon("path/to/forward_icon.png"), "Forward", self)
+        self.forward_button.triggered.connect(self.forward)
+        self.toolbar.addAction(self.forward_button)
+
+        # Create the home button
+        self.home_button = QtWidgets.QAction(QIcon("path/to/home_icon.png"), "Home", self)
+        self.home_button.triggered.connect(self.home)
+        self.toolbar.addAction(self.home_button)
+
+    def back(self):
+        self.history().back()
+
+    def forward(self):
+        self.history().forward()
+
+    def home(self):
+        self.load(QUrl(self.home_url))
+
+    def clear_history(self):
+        self.history().clear()
+        self.history_tab.clear()
+
 # Creates the history tab on the GUI and adds users browsing history to the GUI tab            
 class HistoryTab(QtWidgets.QWidget):
     def __init__(self, history, parent=None):
