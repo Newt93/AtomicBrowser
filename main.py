@@ -26,6 +26,34 @@ class Browser(QtWebEngineWidgets.QWebEngineView):
                 return V8.eval(javascript);
             }
         """)
+        self.history_tab = QtWidgets.QTabWidget()
+        self.history_tab.setTabPosition(QtWidgets.QTabWidget.West)
+        self.history_tab.setMovable(True)
+        self.history_tab.setTabsClosable(True)
+        self.history_tab.tabCloseRequested.connect(self.history_tab.removeTab)
+        self.history_tab.setVisible(False)
+        self.add_history_tab()
+    # Adds the history tab    
+    def add_history_tab(self):
+        self.history_tab.addTab(HistoryTab(self.history()), "History")
+        self.history_tab.setCurrentIndex(self.history_tab.count() - 1)
+    # Lets the user toggle the history tab    
+    def toggle_history_tab(self):
+        if self.history_tab.isVisible():
+            self.history_tab.setVisible(False)
+        else:
+            self.history_tab.setVisible(True)
+# Creates the history tab on the GUI and adds users browsing history to the GUI tab            
+class HistoryTab(QtWidgets.QWidget):
+    def __init__(self, history):
+        super().__init__()
+        self.history_list = QtWidgets.QListWidget()
+        for i in range(history.count()):
+            self.history_list.addItem(history.itemAt(i).url().toString())
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.history_list)
+        self.setLayout(layout)
+        
         # Enable memory caching (Makes browser faster)
         self.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.LocalStorageEnabled, True)
         # Set the cache size
