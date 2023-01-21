@@ -45,13 +45,27 @@ class Browser(QtWebEngineWidgets.QWebEngineView):
             self.history_tab.setVisible(True)
 # Creates the history tab on the GUI and adds users browsing history to the GUI tab            
 class HistoryTab(QtWidgets.QWidget):
-    def __init__(self, history):
-        super().__init__()
+    def __init__(self, history, parent=None):
+        super().__init__(parent)
+
+        # Create a list widget to display the history
         self.history_list = QtWidgets.QListWidget()
-        for i in range(history.count()):
-            self.history_list.addItem(history.itemAt(i).url().toString())
+        self.history_list.setAlternatingRowColors(True)
+
+        # Populate the list widget with the browsing history
+        for url in history:
+            item = QtWidgets.QListWidgetItem(url)
+            self.history_list.addItem(item)
+
+        # Create a clear button
+        clear_button = QtWidgets.QPushButton("Clear History")
+        clear_button.clicked.connect(self.clear_history)
+
+        # Create a layout to hold the list widget and the clear button
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.history_list)
+        layout.addWidget(clear_button)
+
         self.setLayout(layout)
         
         # Enable memory caching (Makes browser faster)
